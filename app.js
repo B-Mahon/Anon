@@ -5,8 +5,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const app = express();
 const mongoose = require("mongoose");
-const encrypt = require("mongoose-encryption");
-
+var md5 = require("md5");
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({
@@ -26,7 +25,6 @@ const userSchema = new mongoose.Schema({
 });
 
 
-userSchema.plugin(encrypt, {secret:process.env.SECRET,encryptedFields:["password"]});
 
 const User = new mongoose.model("User", userSchema);
 
@@ -49,13 +47,11 @@ app.get("/signup", function(req, res) {
 });
 
 app.post("/signup", function(req, res) {
-  console.log(req.body.email);
-  console.log(req.body.pass);
 
   //Add user to database
   const newUser = new User({
     email: req.body.email,
-    password: req.body.pass
+    password: md5(req.body.pass)
   });
 
   newUser.save(function(err) {
@@ -69,16 +65,16 @@ app.post("/signup", function(req, res) {
 
 app.post("/login", function(req, res) {
   const username = req.body.email;
-  const password = req.body.pass;
-console.log("kk");
+  const password = md5(req.body.pass);
+
   User.findOne({
-    email:username
+    email: username
   }, function(err, foundUser) {
     if (err) {
       console.log("user not found");
     } else {
       if (foundUser) {
-        if(foundUser.password === res.render("page"));
+        if (foundUser.password === res.render("page"));
       }
     }
   });

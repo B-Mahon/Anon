@@ -1,91 +1,112 @@
 //jshint esversion:6
-require('dotenv').config()
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const app = express();
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-app.set('view engine', 'ejs');
+const session = require('express-session');
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
 
+const app = express();
+
+app.use(express.static("public"));
+app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/anonDB", {
-  useNewUrlParser: true
-});
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
 
+app.use(passport.initialize());
+app.use(passport.session());
 
-//Create Schema
-const userSchema = new mongoose.Schema({
+mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
+mongoose.set("useCreateIndex", true);
+
+const userSchema = new mongoose.Schema ({
   email: String,
   password: String
 });
 
-
+userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model("User", userSchema);
 
-//GET Method
-//Send user back signup page when they go to HOME route
-app.get("/", function(req, res) {
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.get("/", function(req, res){
   res.render("home");
 });
 
-//GET Method
-//Send user back signup page when they go to HOME route
-app.get("/login", function(req, res) {
+app.get("/login", function(req, res){
   res.render("login");
 });
 
-//GET Method
-//Send user back signup page when they go to HOME route
-app.get("/signup", function(req, res) {
-  res.render("signup");
+app.get("/register", function(req, res){
+  res.render("register");
 });
 
-app.post("/signup", function(req, res) {
+app.get("/secrets", function(req, res){
+  if (req.isAuthenticated()){
+    res.render("secrets");
+  } else {
+    res.redirect("/login");
+  }
+});
 
-bcrypt.hash(req.body.pass,saltRounds,function(err,hash){
-  //Add user to database
-  const newUser = new User({
-    email: req.body.email,
-    password: hash
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/");
+});
+
+app.post("/register", function(req, res){
+
+  User.register({username: req.body.username}, req.body.password, function(err, user){
+    if (err) {
+      console.log(err);
+      res.redirect("/register");
+    } else {
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/secrets");
+      });
+    }
   });
-  newUser.save(function(err) {
+
+});
+
+app.post("/login", function(req, res){
+
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password
+  });
+
+  req.login(user, function(err){
     if (err) {
       console.log(err);
     } else {
-      res.render("page");
+      passport.authenticate("local")(req, res, function(){
+        res.redirect("/secrets");
+      });
     }
   });
-});
-});
-app.post("/login", function(req, res) {
-  const username = req.body.email;
-  const password = req.body.pass;
 
-  User.findOne({
-    email: username
-  }, function(err, foundUser) {
-    if (err) {
-      console.log("user not found");
-    } else {
-      if (foundUser) {
-          bcrypt.compare(password,foundUser.password,function(err,result){
-            if(result === true){
-              res.render("page");
-            }
-          });
-
-      }
-    }
-  });
 });
+
+
+
+
+
+
 
 app.listen(3000, function() {
-  console.log("server is spinnin up");
+  console.log("Server started on port 3000.");
 });

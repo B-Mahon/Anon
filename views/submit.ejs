@@ -20,26 +20,19 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <title>Posts</title>
 </head>
-<nav class="navbar navbar-dark bg-dark justify-content-between mb-5">
-  <div class="container">
-    <a class="navbar-brand">
-      <i class="fas fa-mask"></i>
-      Anon
-    </a>
-  <form class="form-inline">
-      <a class="btn btn-outline-success" href="/submit">POST</a>
-      <a class="btn btn-outline-secondary" href="/logout">Log Out</a>
-    </form>
-    </div>
-</nav>
+
 <body>
 <div class="container" style="text-align: center;">
-<h1>Secrets</h1>
-<% userWithSecrets.forEach(function(user){%>
-  <p class="secret-text"><%=user.secret%></p>
-<% })%>
 
+<h1 class="mb-5">What Would You Like To Share?</h1>
+  <form class="" action="/submit" method="post">
+        <div class="form-group">
 
+          <textarea class="form-control" name="secret" rows="5" cols="30"></textarea>
+        </div>
+        <button class="btn btn-dark" type="submit" name="button">Publish</button>
+      </form>
+</div>
 
 </body>
 

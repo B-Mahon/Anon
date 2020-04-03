@@ -1,4 +1,6 @@
-
+body{
+  background-color: black;
+}
 .view{
   position: relative;
   width:100%;

@@ -2,33 +2,14 @@
 <html lang="en">
 
 <head>
-  <title>Login</title>
+  <title>Register</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
-  <!--===============================================================================================-->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Nunito|Varela+Round&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/bootstrap-social.css">
   <link rel="stylesheet" type="text/css" href="/css/util.css">
   <link rel="stylesheet" type="text/css" href="/css/main.css">
-  <!--===============================================================================================-->
-  <!-- Font Awesome -->
-  <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
-
 </head>
 
 <body>
@@ -37,37 +18,30 @@
     <div class="container-login100">
       <div class="wrap-login100">
 
-          <span class="login100-form-title p-b-26">
-            Register
-          </span>
+        <span class="login100-form-title p-b-26">
+          Register
+        </span>
 
-    <form action="/register" method="POST">
+        <form action="/register" method="POST">
           <div class="wrap-input100">
-            <input class="input100" type="email" name="username">
-            <span class="focus-input100" data-placeholder="Email"></span>
+            <input class="input100" type="email" name="username" placeholder="Email">
           </div>
 
           <div class="wrap-input100">
-            <input class="input100" type="password" name="password">
-            <span class="focus-input100" data-placeholder="Password"></span>
+            <input class="input100" type="password" name="password" placeholder="Password" pattern=".{8,}" required title="8 characters minimum">
           </div>
 
-
-
-              <div class="col-sm-4">
-                <div class="card">
-                  <div class="card-body">
-                    <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
-                      <i class="fab fa-google"></i>
-                      Sign Up with Google
-                    </a>
-                  </div>
-
-                </div>
+          <div class="col-sm-4 google">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-block btn-social btn-google" href="/auth/google" role="button">
+                  <i class="fab fa-google"></i>
+                  Sign Up with Google
+                </a>
               </div>
 
-
-
+            </div>
+          </div>
 
           <div class="container-login100-form-btn">
             <div class="wrap-login100-form-btn">
@@ -77,20 +51,17 @@
               </button>
             </div>
           </div>
-</form>
+        </form>
 
+        <div class="text-center p-t-115">
+          <span class="txt1">
+            Have an account?
+          </span>
 
-
-
-          <div class="text-center p-t-115">
-            <span class="txt1">
-              Have an account?
-            </span>
-
-            <a class="txt2" href="/login">
-              Log In
-            </a>
-          </div>
+          <a class="txt2" href="/login">
+            Log In
+          </a>
+        </div>
 
       </div>
     </div>

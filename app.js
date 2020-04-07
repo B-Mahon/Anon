@@ -10,13 +10,12 @@ const passportLocalMongoose = require("passport-local-mongoose");
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var findOrCreate = require('mongoose-findorcreate');
 const app = express();
-
-app.use(express.static("public"));
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
-
+app.use(bodyParser.json());
 app.use(session({
   secret: "Our little secret.",
   resave: false,
@@ -33,7 +32,8 @@ const userSchema = new mongoose.Schema ({
   email: String,
   password: String,
   googleId: String,
-  secret: String
+  secret: String,
+  likes:{type:Number,default:0}
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -94,6 +94,7 @@ app.get("/register", function(req, res){
 });
 
 app.get("/secrets", function(req, res){
+
   User.find({"secret": {$ne:null}},function(err,foundUsers){
     if(err){
       console.log(err);
@@ -169,11 +170,18 @@ app.post("/submit",function(req,res){
   });
 });
 
-let port = process.env.PORT;
+app.post("/like",function(req,res){
+  console.log(JSON.parse(req.body.id));
+  console.log(req.body.likes);
+User.update({'googleId':req.body.id},{$set:{"likes":req.body.likes}});
+});
+
+
+/*let port = process.env.PORT;
 if(port == null || port == ""){
   port = 3000;
-}
+}*/
 
-app.listen(port, function() {
+app.listen(3000, function() {
   console.log("Server started on port 3000.");
 });

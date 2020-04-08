@@ -24,7 +24,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 mongoose.connect("mongodb+srv://admin-blaine:Hobamnmb1@cluster0-kcze6.mongodb.net/userDB", {useNewUrlParser: true});
 mongoose.set("useCreateIndex", true);
 
@@ -57,6 +56,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
+
     callbackURL: "https://sheltered-woodland-75457.herokuapp.com/auth/google/anon",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
@@ -171,10 +171,25 @@ app.post("/submit",function(req,res){
 });
 
 app.post("/like",function(req,res){
-  console.log(JSON.parse(req.body.id));
+  console.log(req.body.id);
   console.log(req.body.likes);
-User.update({'googleId':req.body.id},{$set:{"likes":req.body.likes}});
+
+  User.update(
+    {googleId:req.body.id},
+    {$set:{likes:req.body.likes}},
+    function(err,result){
+      if(!err){
+        console.log("success");
+      }else{
+        console.log(err);
+      }
+    }
+  );
 });
+
+
+
+
 
 
 let port = process.env.PORT;

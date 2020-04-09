@@ -24,6 +24,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+//mongoose.connect("mongodb://localhost:27017/mydb")
 mongoose.connect("mongodb+srv://admin-blaine:Hobamnmb1@cluster0-kcze6.mongodb.net/userDB", {useNewUrlParser: true});
 mongoose.set("useCreateIndex", true);
 
@@ -56,7 +57,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-
+    //callbackURL:"http://localhost:3000/auth/google/anon",
     callbackURL: "https://sheltered-woodland-75457.herokuapp.com/auth/google/anon",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },

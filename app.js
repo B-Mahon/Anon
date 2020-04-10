@@ -116,6 +116,10 @@ app.get("/submit",function(req,res){
   }
 });
 
+app.get("google07209c53b9ee036d.html", function(req, res){
+  console.log("hello");
+});
+
 
 app.get("/logout", function(req, res){
   req.logout();
